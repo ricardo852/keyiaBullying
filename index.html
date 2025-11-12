@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luz estudiantil</title>
+    <script src="https://cdn.jsdelivr.net/npm/@google/genai@0.1.0/dist/gemini-sdk.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/lib/marked.umd.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-gray: #f3f4f6;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #f3f4f6;
+            color: var(--primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 6rem auto 2rem;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .info-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-box ul {
+            padding-left: 1.5rem;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .emergency-box {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .emergency-phone {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .fab-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            z-index: 99;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .chat-overlay.active {
+            display: flex;
+        }
+
+        .chat-container {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .chat-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #f9fafb;
+            max-height: 400px;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: var(--primary);
+            color: white;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 0.75rem 1rem;
+            border-radius: 16px;
+            line-height: 1.5;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: var(--text-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chat-input {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .chat-input form {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary);
+        }
+
+        .chat-input button {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.1);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.75rem 1rem;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                transition: left 0.3s;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .fab-button {
+                bottom: 1rem;
+                right: 1rem;
+                width: 56px;
+                height: 56px;
+            }
+
+            .chat-container {
+                max-width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            
+            <div class="logo"> Luz Estudiantil</div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-link active" data-page="inicio">Inicio</li>
+                <li class="nav-link" data-page="que-es">¿Qué es?</li>
+                <li class="nav-link" data-page="prevencion">Prevención</li>
+                <li class="nav-link" data-page="ayuda">Ayuda</li>
+                <li class="nav-link" data-page="respeto">Respeto</li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page active" id="inicio">
+            <div class="hero">
+                <h1>Juntos Contra el Bullying</h1>
+                <p>Un espacio seguro para aprender, prevenir y apoyar a quienes lo necesitan</p>
+                <div style="font-size: 3rem; margin-top: 1rem;">❤️</div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📖</div>
+                    <h3>Educación</h3>
+                    <p>Aprende sobre el bullying, sus tipos y cómo identificarlo</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Prevención</h3>
+                    <p>Herramientas y estrategias para prevenir el acoso escolar</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h3>Apoyo</h3>
+                    <p>Encuentra ayuda y recursos cuando más los necesitas</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>¿Por qué es importante combatir el bullying?</h3>
+                <p>El bullying afecta a millones de niños y adolescentes en todo el mundo. Sus consecuencias pueden ser devastadoras, afectando la salud mental, el rendimiento académico y el desarrollo personal de las víctimas.</p>
+                <p style="margin-top: 1rem;">Juntos podemos crear espacios seguros donde todos se sientan respetados, valorados y libres de miedo. Tu voz y tus acciones pueden marcar la diferencia.</p>
+            </div>
+        </div>
+
+        <div class="page" id="que-es">
+            <div class="info-box">
+                <h3>¿Qué es el Bullying?</h3>
+                <p>El bullying o acoso escolar es un comportamiento agresivo e intencional que implica un desequilibrio de poder. Se repite a lo largo del tiempo y puede incluir acciones como amenazas, rumores, ataques físicos o verbales, y la exclusión de una persona de un grupo.</p>
+            </div>
+
+            <h2 style="margin: 2rem 0 1rem; font-size: 2rem; color: var(--text-dark);">Tipos de Bullying</h2>
+            
+            <div class="cards-grid">
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h3 style="color: #ef4444;">🤛 Bullying Físico</h3>
+                    <p>Incluye golpes, empujones, patadas o cualquier forma de agresión física.</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
+                        <li>Golpear, patear o empujar</li>
+                        <li>Robar o dañar pertenencias</li>
+                        <li>Obligar a hacer cosas no deseadas</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-left: 4px solid #f97316;">
+                    <h3 style="color: #f97316;">💬 Bullying Verbal</h3>
+                    <p>Uso de palabras para herir, insultar o menospreciar a otra persona.</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
+                        <li>Insultos y burlas</li>
+                        <li>Amenazas verbales</li>
+                        <li>Comentarios ofensivos</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-left: 4px solid #8b5cf6;">
+                    <h3 style="color: #8b5cf6;">🧠 Bullying Psicológico</h3>
+                    <p>Daño emocional mediante manipulación, exclusión o humillación.</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
+                        <li>Exclusión social deliberada</li>
+                        <li>Difundir rumores</li>
+                        <li>Manipulación emocional</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-left: 4px solid #3b82f6;">
+                    <h3 style="color: #3b82f6;">💻 Ciberbullying</h3>
+                    <p>Acoso a través de medios digitales y redes sociales.</p>
+                    <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
+                        <li>Mensajes ofensivos online</li>
+                        <li>Publicar información privada</li>
+                        <li>Crear perfiles falsos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="prevencion">
+            <div class="hero" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
+                <h1>Prevención del Bullying</h1>
+                <p>La prevención es la clave para crear ambientes seguros y respetuosos para todos</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>🛡️ Para Estudiantes</h3>
+                    <ul style="padding-left: 1.5rem; color: var(--text-light); line-height: 1.8;">
+                        <li>Trata a los demás como te gustaría ser tratado</li>
+                        <li>Habla con un adulto de confianza si ves bullying</li>
+                        <li>Apoya a quienes están siendo acosados</li>
+                        <li>No difundas rumores ni participes en exclusión</li>
+                        <li>Usa las redes sociales de forma responsable</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>👨‍👩‍👧 Para Padres y Educadores</h3>
+                    <ul style="padding-left: 1.5rem; color: var(--text-light); line-height: 1.8;">
+                        <li>Mantén comunicación abierta con los jóvenes</li>
+                        <li>Observa cambios en el comportamiento</li>
+                        <li>Establece reglas claras contra el bullying</li>
+                        <li>Enseña habilidades de resolución de conflictos</li>
+                        <li>Fomenta la empatía y el respeto</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="ayuda">
+            <div class="emergency-box">
+                <h2>🚨 Línea de Emergencia</h2>
+                <div class="emergency-phone">911</div>
+                <p>En caso de peligro inmediato, llama ahora</p>
+            </div>
+
+            <div class="info-box" style="border-left-color: #f59e0b; background: #fffbeb;">
+                <h3>📞 ¿Qué hacer si sufres bullying?</h3>
+                <ol style="padding-left: 1.5rem; color: var(--text-dark); line-height: 1.8;">
+                    <li style="margin-bottom: 0.75rem;"><strong>No te quedes callado/a:</strong> Habla con un adulto de confianza (padres, maestros, orientador).</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Documenta:</strong> Guarda evidencia (mensajes, capturas de pantalla, notas).</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>No respondas con violencia:</strong> Mantén la calma y aléjate de situaciones peligrosas.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Busca apoyo:</strong> Rodéate de amigos y personas que te apoyen.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Denuncia:</strong> Reporta la situación a las autoridades escolares.</li>
+                </ol>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h3 style="color: #3b82f6;">📞 Línea de Ayuda</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--text-dark);">800-123-4567</p>
+                    <p style="color: var(--text-light);">Disponible 24/7, confidencial y gratuita</p>
+                </div>
+
+                <div class="card">
+                    <h3 style="color: #8b5cf6;">🧠 Ayuda Psicológica</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--text-dark);">800-987-6543</p>
+                    <p style="color: var(--text-light);">Apoyo emocional y orientación profesional</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="respeto">
+            <div class="hero" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                <h1>Valores de Respeto y Empatía</h1>
+                <p>El respeto mutuo es la base de una convivencia sana y armoniosa</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">💙</div>
+                    <h3>Empatía</h3>
+                    <p>Ponerse en el lugar del otro y comprender sus sentimientos</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <h3>Solidaridad</h3>
+                    <p>Apoyar a quienes lo necesitan y trabajar juntos</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌈</div>
+                    <h3>Diversidad</h3>
+                    <p>Celebrar las diferencias que nos hacen únicos</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>📝 Frases Inspiradoras</h3>
+                <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-light);">
+                    "Ningún acto de bondad, por pequeño que sea, es en vano." — Esopo
+                </blockquote>
+                <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-light);">
+                    "El respeto es una calle de dos sentidos. Si lo quieres recibir, primero debes darlo." — R.G. Risch
+                </blockquote>
+                <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-light);">
+                    "La diferencia entre lo que hacemos y lo que somos capaces de hacer solucionaría la mayoría de los problemas del mundo." — Mahatma Gandhi
+                </blockquote>
+            </div>
+        </div>
+    </main>
+
+    <button class="fab-button" id="fabButton">🤖</button>
+
+    <div class="chat-overlay" id="chatOverlay">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">🤖</div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1rem; font-weight: 600;">Asistente IA</h3>
+                        <p style="margin: 0; font-size: 0.75rem; opacity: 0.9;">En línea</p>
+                    </div>
+                </div>
+                <button class="chat-close" id="closeChat">✕</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        ¡Hola! Soy tu asistente de IA. Estoy aquí para apoyarte. ¿En qué puedo ayudarte hoy?
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <form id="chatForm">
+                    <input type="text" id="chatInput" placeholder="Escribe tu mensaje..." autocomplete="off">
+                    <button type="submit">➤</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <h3 style="margin-bottom: 0.5rem;">Juntos Contra el Bullying</h3>
+        <p style="opacity: 0.8;">Tu voz importa. Tu acción puede salvar vidas.</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">© 2024 App Anti-Bullying. Todos los derechos reservados.</p>
+    </footer>
+
+<script>
+  import { API_KEY } from "./config.js";
+  import { URL_KEY } from "./config.js";
+  document.addEventListener("DOMContentLoaded", () => {
+  const fabButton = document.getElementById("fabButton");
+  const chatOverlay = document.getElementById("chatOverlay");
+  const closeChat = document.getElementById("closeChat");
+  const chatForm = document.getElementById("chatForm");
+  const chatInput = document.getElementById("chatInput");
+  const chatMessages = document.getElementById("chatMessages");
+  const sendButton = chatForm.querySelector('button[type="submit"]');
+
+  // === CONFIGURACIÓN GROQ ===
+  const apiKey = API_KEY; // ⚠️ Solo para uso personal
+  const apiUrl = URL_KEY;
+  const model = "llama-3.1-8b-instant";
+
+  // === FUNCIONES DE INTERFAZ ===
+  function appendMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender);
+    msg.innerHTML = `
+      <div class="message-avatar">${sender === "user" ? "👤" : "💙"}</div>
+      <div class="message-content">${text}</div>
+    `;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showTyping() {
+    const typing = document.createElement("div");
+    typing.id = "typing";
+    typing.classList.add("message", "bot");
+    typing.innerHTML = `
+      <div class="message-avatar">💙</div>
+      <div class="typing-indicator"><span></span><span></span><span></span></div>
+    `;
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function hideTyping() {
+    const typing = document.getElementById("typing");
+    if (typing) typing.remove();
+  }
+
+  // === EVENTOS ===
+  fabButton.addEventListener("click", () => {
+    chatOverlay.classList.toggle("active");
+    fabButton.textContent = chatOverlay.classList.contains("active") ? "✕" : "💙";
+  });
+
+  closeChat.addEventListener("click", () => {
+    chatOverlay.classList.remove("active");
+    fabButton.textContent = "💙";
+  });
+
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const userText = chatInput.value.trim().toLowerCase();
+    if (!userText) return;
+
+    appendMessage("user", userText);
+    chatInput.value = "";
+    chatInput.disabled = true;
+    sendButton.disabled = true;
+    showTyping();
+
+    // === RESPUESTAS RÁPIDAS ===
+    if (["hola", "buenas", "hey", "holi"].some(p => userText.includes(p))) {
+      hideTyping();
+      appendMessage("bot", "¡Hola! 😊 Soy Lumi, tu acompañante emocional. ¿Cómo te sientes hoy?");
+      chatInput.disabled = false;
+      sendButton.disabled = false;
+      return;
+    }
+
+    if (["como estas", "cómo estás", "que tal"].some(p => userText.includes(p))) {
+      hideTyping();
+      appendMessage("bot", "💙 Estoy aquí y listo para escucharte. Cuéntame, ¿cómo te va hoy?");
+      chatInput.disabled = false;
+      sendButton.disabled = false;
+      return;
+    }
+
+    // === DETECCIÓN DE CONTEXTO ===
+    const palabrasEmocionales = ["triste", "mal", "solo", "estresado", "ansioso", "deprimido", "preocupado", "me siento"];
+    const palabrasBullying = ["bullying", "acoso", "intimidación", "molestan", "me insultan", "me pegan"];
+    const contextoEmocional = palabrasEmocionales.some(p => userText.includes(p));
+    const contextoBullying = palabrasBullying.some(p => userText.includes(p));
+
+    // === RESPUESTAS SEGÚN CONTEXTO ===
+    if (contextoEmocional || contextoBullying) {
+      try {
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model,
+            messages: [
+              {
+                role: "system",
+                content: `Eres Lumi 💙, un asistente emocional empático. Escucha, apoya y ofrece consejos amables a personas que se sienten mal o viven situaciones de bullying. Usa un tono cariñoso, humano y tranquilizador.`,
+              },
+              { role: "user", content: userText }
+            ],
+            temperature: 0.8,
+          }),
+        });
+
+        const data = await res.json();
+        hideTyping();
+
+        if (data.error) {
+          appendMessage("bot", `⚠️ Error: ${data.error.message}`);
+        } else {
+          const respuesta =
+            data.choices?.[0]?.message?.content ||
+            data.choices?.[0]?.text ||
+            "⚠️ No se recibió una respuesta válida.";
+          appendMessage("bot", respuesta);
+        }
+      } catch (error) {
+        hideTyping();
+        appendMessage("bot", "❌ No se pudo conectar con el servidor de ayuda emocional.");
+      }
+    } else {
+      hideTyping();
+      appendMessage("bot", "💬 Lo siento, solo estoy aquí para ayudarte emocionalmente o con temas relacionados al bullying.");
+    }
+
+    chatInput.disabled = false;
+    sendButton.disabled = false;
+    chatInput.focus();
+  });
+});
+</script>
+
+
+
+    
+</body>
+</html>
