@@ -736,8 +736,9 @@
     </footer>
 
 <script>
-  import { API_KEY } from "./config.js";
-  import { URL_KEY } from "./config.js";
+
+    
+      
   document.addEventListener("DOMContentLoaded", () => {
   const fabButton = document.getElementById("fabButton");
   const chatOverlay = document.getElementById("chatOverlay");
@@ -748,8 +749,8 @@
   const sendButton = chatForm.querySelector('button[type="submit"]');
 
   // === CONFIGURACIÓN GROQ ===
-  const apiKey = API_KEY; // ⚠️ Solo para uso personal
-  const apiUrl = URL_KEY;
+  const apiKey = ""; // ⚠️ Solo para uso personal
+  const apiUrl = "";
   const model = "llama-3.1-8b-instant";
 
   // === FUNCIONES DE INTERFAZ ===
