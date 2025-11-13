@@ -736,9 +736,39 @@
     </footer>
 
 <script>
+ document.addEventListener("DOMContentLoaded", () => {
+  // ======== NAVBAR =========
+  const navLinks = document.querySelectorAll(".nav-link");
+  const pages = document.querySelectorAll(".page");
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("navMenu");
 
-    
-      
+  // Cambiar de página al hacer clic
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      // Quitar clase "active" de todos los enlaces
+      navLinks.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+
+      // Mostrar solo la sección seleccionada
+      const target = link.getAttribute("data-page");
+      pages.forEach(p => {
+        p.classList.remove("active");
+        if (p.id === target) p.classList.add("active");
+      });
+
+      // Cerrar menú si está en modo móvil
+      navMenu.classList.remove("active");
+      hamburger.classList.remove("active");
+    });
+  });
+
+  // Menú hamburguesa (móviles)
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    navMenu.classList.toggle("active");
+  });
+});
   document.addEventListener("DOMContentLoaded", () => {
   const fabButton = document.getElementById("fabButton");
   const chatOverlay = document.getElementById("chatOverlay");
