@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luz estudiantil</title>
+<meta charset="UTF-8">
+    <title>Luz Estudiantil - Colombia</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; 
+        style-src 'self' 'unsafe-inline'; 
+        media-src *; 
+        connect-src 'self' https://api.groq.com; 
+        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; 
+        img-src 'self' data: content:;
+    ">
+    
     <script src="https://cdn.jsdelivr.net/npm/@google/genai@0.1.0/dist/gemini-sdk.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/lib/marked.umd.min.js"></script>
-    
+
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -15,13 +29,13 @@
         }
 
         :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --danger: #ef4444;
-            --success: #10b981;
-            --bg-gray: #f3f4f6;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
+            --primary: #004d99; /* Azul más colombiano */
+            --secondary: #ffcd00; /* Amarillo colombiano */
+            --danger: #e53935; /* Rojo más fuerte */
+            --success: #00897b; /* Verde turquesa */
+            --bg-gray: #f5f5f5;
+            --text-dark: #212121;
+            --text-light: #757575;
         }
 
         body {
@@ -74,7 +88,7 @@
         }
 
         .nav-link:hover, .nav-link.active {
-            background: #f3f4f6;
+            background: #e0e0e0;
             color: var(--primary);
         }
 
@@ -126,7 +140,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), #00b0e5); /* Tonos de azul y celeste */
             color: white;
             padding: 4rem 2rem;
             border-radius: 20px;
@@ -197,7 +211,7 @@
         }
 
         .emergency-box {
-            background: linear-gradient(135deg, var(--danger), #dc2626);
+            background: linear-gradient(135deg, var(--danger), #ff8a65); /* Rojo y Naranja */
             color: white;
             padding: 2rem;
             border-radius: 15px;
@@ -217,13 +231,13 @@
             right: 2rem;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--secondary), var(--primary)); /* Amarillo y Azul */
             border: none;
             border-radius: 50%;
             color: white;
             font-size: 2rem;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 77, 153, 0.4);
             z-index: 99;
             transition: transform 0.3s;
             display: flex;
@@ -269,7 +283,7 @@
         }
 
         .chat-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), #00b0e5);
             color: white;
             padding: 1.2rem;
             display: flex;
@@ -344,7 +358,7 @@
 
         .message.bot .message-avatar {
             background: var(--secondary);
-            color: white;
+            color: var(--primary); /* Texto azul sobre amarillo */
         }
 
         .message.user .message-avatar {
@@ -397,7 +411,7 @@
         .chat-input button {
             width: 44px;
             height: 44px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), #00b0e5);
             color: white;
             border: none;
             border-radius: 50%;
@@ -422,7 +436,7 @@
         .typing-indicator span {
             width: 8px;
             height: 8px;
-            background: #9ca3af;
+            background: #9e9e9e;
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out;
         }
@@ -493,12 +507,12 @@
     <nav class="navbar">
         <div class="nav-container">
             
-            <div class="logo"> Luz Estudiantil</div>
+            <div class="logo">🇨🇴 Luz Estudiantil</div>
             <ul class="nav-menu" id="navMenu">
                 <li class="nav-link active" data-page="inicio">Inicio</li>
                 <li class="nav-link" data-page="que-es">¿Qué es?</li>
                 <li class="nav-link" data-page="prevencion">Prevención</li>
-                <li class="nav-link" data-page="ayuda">Ayuda</li>
+                <li class="nav-link" data-page="ayuda">Ayuda Colombia</li>
                 <li class="nav-link" data-page="respeto">Respeto</li>
             </ul>
             <div class="hamburger" id="hamburger">
@@ -512,113 +526,113 @@
     <main>
         <div class="page active" id="inicio">
             <div class="hero">
-                <h1>Juntos Contra el Bullying</h1>
-                <p>Un espacio seguro para aprender, prevenir y apoyar a quienes lo necesitan</p>
-                <div style="font-size: 3rem; margin-top: 1rem;">❤️</div>
+                <h1>Colombia Unida Contra el Acoso Escolar</h1>
+                <p>Un espacio seguro con recursos y apoyo específico para la comunidad educativa colombiana</p>
+                <div style="font-size: 3rem; margin-top: 1rem;">🇨🇴</div>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
                     <div class="card-icon">📖</div>
-                    <h3>Educación</h3>
-                    <p>Aprende sobre el bullying, sus tipos y cómo identificarlo</p>
+                    <h3>Educación y Normativa</h3>
+                    <p>Conoce sobre el bullying y el **Sistema Nacional de Convivencia Escolar** (Ley 1620 de 2013)</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🛡️</div>
-                    <h3>Prevención</h3>
-                    <p>Herramientas y estrategias para prevenir el acoso escolar</p>
+                    <h3>Prevención en Entornos Colombianos</h3>
+                    <p>Estrategias adaptadas para escuelas y colegios de Colombia</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">👥</div>
-                    <h3>Apoyo</h3>
-                    <p>Encuentra ayuda y recursos cuando más los necesitas</p>
+                    <h3>Apoyo y Rutas de Denuncia</h3>
+                    <p>Contactos y pasos a seguir según las **Rutas de Atención Integrada** en Colombia</p>
                 </div>
             </div>
 
             <div class="info-box">
-                <h3>¿Por qué es importante combatir el bullying?</h3>
-                <p>El bullying afecta a millones de niños y adolescentes en todo el mundo. Sus consecuencias pueden ser devastadoras, afectando la salud mental, el rendimiento académico y el desarrollo personal de las víctimas.</p>
-                <p style="margin-top: 1rem;">Juntos podemos crear espacios seguros donde todos se sientan respetados, valorados y libres de miedo. Tu voz y tus acciones pueden marcar la diferencia.</p>
+                <h3>El Acoso Escolar en el Contexto Colombiano</h3>
+                <p>El bullying o acoso escolar es un problema que afecta la calidad de la educación y el bienestar de los niños, niñas y adolescentes en Colombia. La **Ley 1620 de 2013** y el **Decreto 1965 de 2013** establecen el marco normativo para promover la convivencia escolar y prevenir el acoso en todas las instituciones educativas del país.</p>
+                <p style="margin-top: 1rem;">Nuestro compromiso es fomentar el respeto, la tolerancia y el cumplimiento de las normativas vigentes para garantizar espacios de aprendizaje seguros y libres de violencia.</p>
             </div>
         </div>
 
         <div class="page" id="que-es">
             <div class="info-box">
-                <h3>¿Qué es el Bullying?</h3>
-                <p>El bullying o acoso escolar es un comportamiento agresivo e intencional que implica un desequilibrio de poder. Se repite a lo largo del tiempo y puede incluir acciones como amenazas, rumores, ataques físicos o verbales, y la exclusión de una persona de un grupo.</p>
+                <h3>Definición de Acoso Escolar (Bullying) - Ley 1620</h3>
+                <p>El acoso escolar es todo comportamiento **físico** o **verbal**, **agresivo** e **intencional**, que tiene lugar en el entorno escolar o virtual (ciberacoso), que se da de forma **repetida** y en el que hay un **desequilibrio de poder**. Afecta la dignidad humana y los derechos fundamentales de las víctimas.</p>
             </div>
 
-            <h2 style="margin: 2rem 0 1rem; font-size: 2rem; color: var(--text-dark);">Tipos de Bullying</h2>
+            <h2 style="margin: 2rem 0 1rem; font-size: 2rem; color: var(--text-dark);">Tipos de Acoso y Clasificación en Colombia (Ley 1620)</h2>
             
             <div class="cards-grid">
-                <div class="card" style="border-left: 4px solid #ef4444;">
-                    <h3 style="color: #ef4444;">🤛 Bullying Físico</h3>
-                    <p>Incluye golpes, empujones, patadas o cualquier forma de agresión física.</p>
+                <div class="card" style="border-left: 4px solid #e53935;">
+                    <h3 style="color: #e53935;">🤛 Físico</h3>
+                    <p>Agresiones corporales, como golpes, empujones, o daño a la propiedad del estudiante. Se reporta en el **Nivel II o III** de la Ruta de Atención.</p>
                     <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
                         <li>Golpear, patear o empujar</li>
                         <li>Robar o dañar pertenencias</li>
-                        <li>Obligar a hacer cosas no deseadas</li>
+                        <li>Encerrar o ignorar con agresión</li>
                     </ul>
                 </div>
 
-                <div class="card" style="border-left: 4px solid #f97316;">
-                    <h3 style="color: #f97316;">💬 Bullying Verbal</h3>
-                    <p>Uso de palabras para herir, insultar o menospreciar a otra persona.</p>
+                <div class="card" style="border-left: 4px solid #ff9800;">
+                    <h3 style="color: #ff9800;">💬 Verbal</h3>
+                    <p>Uso de lenguaje ofensivo, amenazas, chistes discriminatorios o apodos hirientes. Comportamiento generalmente clasificado en el **Nivel II**.</p>
                     <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
-                        <li>Insultos y burlas</li>
-                        <li>Amenazas verbales</li>
-                        <li>Comentarios ofensivos</li>
+                        <li>Insultos y burlas persistentes</li>
+                        <li>Amenazas de daño</li>
+                        <li>Comentarios discriminatorios (racismo, homofobia, etc.)</li>
                     </ul>
                 </div>
 
-                <div class="card" style="border-left: 4px solid #8b5cf6;">
-                    <h3 style="color: #8b5cf6;">🧠 Bullying Psicológico</h3>
-                    <p>Daño emocional mediante manipulación, exclusión o humillación.</p>
+                <div class="card" style="border-left: 4px solid #673ab7;">
+                    <h3 style="color: #673ab7;">🧠 Psicológico / Relacional</h3>
+                    <p>Acciones que buscan dañar la reputación o las relaciones sociales (rumores, exclusión, manipulación). Puede ser **Nivel II o III**.</p>
                     <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
                         <li>Exclusión social deliberada</li>
-                        <li>Difundir rumores</li>
-                        <li>Manipulación emocional</li>
+                        <li>Difundir rumores falsos</li>
+                        <li>Manipulación o intimidación</li>
                     </ul>
                 </div>
 
-                <div class="card" style="border-left: 4px solid #3b82f6;">
-                    <h3 style="color: #3b82f6;">💻 Ciberbullying</h3>
-                    <p>Acoso a través de medios digitales y redes sociales.</p>
+                <div class="card" style="border-left: 4px solid #2196f3;">
+                    <h3 style="color: #2196f3;">💻 Ciberacoso (Ciberbullying)</h3>
+                    <p>Acoso usando medios digitales, redes sociales o internet. Suele ser una situación **Tipo III** por su gravedad y difusión.</p>
                     <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-light);">
-                        <li>Mensajes ofensivos online</li>
-                        <li>Publicar información privada</li>
-                        <li>Crear perfiles falsos</li>
+                        <li>Mensajes ofensivos en redes</li>
+                        <li>Publicar fotos o información privada sin consentimiento</li>
+                        <li>Crear perfiles falsos para difamar</li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div class="page" id="prevencion">
-            <div class="hero" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
-                <h1>Prevención del Bullying</h1>
-                <p>La prevención es la clave para crear ambientes seguros y respetuosos para todos</p>
+            <div class="hero" style="background: linear-gradient(135deg, var(--success), #4db6ac);">
+                <h1>Estrategias de Prevención en Colombia</h1>
+                <p>La **Ley 1620** exige a las instituciones educativas desarrollar y aplicar un **Manual de Convivencia** para prevenir, detectar y resolver conflictos</p>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
-                    <h3>🛡️ Para Estudiantes</h3>
+                    <h3>🛡️ Para Estudiantes Colombianos</h3>
                     <ul style="padding-left: 1.5rem; color: var(--text-light); line-height: 1.8;">
-                        <li>Trata a los demás como te gustaría ser tratado</li>
-                        <li>Habla con un adulto de confianza si ves bullying</li>
-                        <li>Apoya a quienes están siendo acosados</li>
-                        <li>No difundas rumores ni participes en exclusión</li>
-                        <li>Usa las redes sociales de forma responsable</li>
+                        <li>**Denuncia:** Reporta el caso inmediatamente a un docente, coordinador o directivo.</li>
+                        <li>**No seas espectador:** Defiende o busca ayuda para quien está siendo acosado.</li>
+                        <li>**Conoce el Manual de Convivencia** de tu colegio.</li>
+                        <li>Usa las redes sociales con **responsabilidad** (Ciberconvivencia).</li>
+                        <li>Fomenta el diálogo y la solución pacífica de conflictos.</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h3>👨‍👩‍👧 Para Padres y Educadores</h3>
+                    <h3>👨‍👩‍👧 Para Padres y Educadores en Colombia</h3>
                     <ul style="padding-left: 1.5rem; color: var(--text-light); line-height: 1.8;">
-                        <li>Mantén comunicación abierta con los jóvenes</li>
-                        <li>Observa cambios en el comportamiento</li>
-                        <li>Establece reglas claras contra el bullying</li>
-                        <li>Enseña habilidades de resolución de conflictos</li>
-                        <li>Fomenta la empatía y el respeto</li>
+                        <li>Implementar la **Ruta de Atención Integral** de la Ley 1620.</li>
+                        <li>Revisar y difundir el **Manual de Convivencia** con la comunidad.</li>
+                        <li>Capacitar a docentes en detección de acoso y manejo de situaciones tipo I, II y III.</li>
+                        <li>Promover la **cátedra de la paz** y la educación en derechos humanos.</li>
+                        <li>Mantener canales de comunicación confidenciales para las denuncias.</li>
                     </ul>
                 </div>
             </div>
@@ -626,77 +640,74 @@
 
         <div class="page" id="ayuda">
             <div class="emergency-box">
-                <h2>🚨 Línea de Emergencia</h2>
-                <div class="emergency-phone">911</div>
-                <p>En caso de peligro inmediato, llama ahora</p>
+                <h2>🚨 Línea de Emergencia y Denuncia - Colombia</h2>
+                <div class="emergency-phone">123</div>
+                <p><strong>Línea Nacional de Emergencias.</strong> Úsala en caso de peligro o agresión física inminente</p>
             </div>
 
-            <div class="info-box" style="border-left-color: #f59e0b; background: #fffbeb;">
-                <h3>📞 ¿Qué hacer si sufres bullying?</h3>
+            <div class="info-box" style="border-left-color: #ffcd00; background: #fffde7;">
+                <h3>📞 Rutas de Apoyo Nacionales y Departamentales</h3>
                 <ol style="padding-left: 1.5rem; color: var(--text-dark); line-height: 1.8;">
-                    <li style="margin-bottom: 0.75rem;"><strong>No te quedes callado/a:</strong> Habla con un adulto de confianza (padres, maestros, orientador).</li>
-                    <li style="margin-bottom: 0.75rem;"><strong>Documenta:</strong> Guarda evidencia (mensajes, capturas de pantalla, notas).</li>
-                    <li style="margin-bottom: 0.75rem;"><strong>No respondas con violencia:</strong> Mantén la calma y aléjate de situaciones peligrosas.</li>
-                    <li style="margin-bottom: 0.75rem;"><strong>Busca apoyo:</strong> Rodéate de amigos y personas que te apoyen.</li>
-                    <li style="margin-bottom: 0.75rem;"><strong>Denuncia:</strong> Reporta la situación a las autoridades escolares.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Línea 141 (ICBF):</strong> Para reportar situaciones que amenacen o vulneren los derechos de niños, niñas y adolescentes.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Secretarías de Educación:</strong> Todas tienen una instancia para recibir quejas de acoso escolar. Contacta la de tu municipio o departamento.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Comisaría de Familia:</strong> Para orientación legal y apoyo psicosocial ante situaciones de violencia.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Orientador Escolar:</strong> Es el primer contacto oficial dentro de la institución para activar la Ruta de Atención.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Línea de la Vida (Bogotá - 106) / Líneas locales de salud mental:</strong> Para atención psicológica inmediata y crisis emocional.</li>
                 </ol>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
-                    <h3 style="color: #3b82f6;">📞 Línea de Ayuda</h3>
-                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--text-dark);">800-123-4567</p>
-                    <p style="color: var(--text-light);">Disponible 24/7, confidencial y gratuita</p>
+                    <h3 style="color: var(--primary);">📞 Contacto ICBF (Línea 141)</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--text-dark);">141</p>
+                    <p style="color: var(--text-light);">Reporte de vulneración de derechos de NNA.</p>
                 </div>
 
                 <div class="card">
-                    <h3 style="color: #8b5cf6;">🧠 Ayuda Psicológica</h3>
-                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--text-dark);">800-987-6543</p>
-                    <p style="color: var(--text-light);">Apoyo emocional y orientación profesional</p>
+                    <h3 style="color: var(--secondary);">📞 Salud Mental Local</h3>
+                    <p style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; color: var(--text-dark);">Busca tu línea de crisis local</p>
+                    <p style="color: var(--text-light);">Línea de la Vida, Cruz Roja o Secretarías de Salud.</p>
                 </div>
             </div>
         </div>
 
         <div class="page" id="respeto">
-            <div class="hero" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
-                <h1>Valores de Respeto y Empatía</h1>
-                <p>El respeto mutuo es la base de una convivencia sana y armoniosa</p>
+            <div class="hero" style="background: linear-gradient(135deg, var(--primary), #00b0e5);">
+                <h1>Valores de Convivencia y Ciudadanía - Colombia</h1>
+                <p>El respeto mutuo y la diversidad son pilares de la paz que construimos día a día</p>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
                     <div class="card-icon">💙</div>
                     <h3>Empatía</h3>
-                    <p>Ponerse en el lugar del otro y comprender sus sentimientos</p>
+                    <p>Comprender las realidades de los demás, especialmente en un país diverso como Colombia.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🤝</div>
-                    <h3>Solidaridad</h3>
-                    <p>Apoyar a quienes lo necesitan y trabajar juntos</p>
+                    <h3>Tolerancia y Paz</h3>
+                    <p>Aceptar las diferencias y construir un ambiente de no violencia, crucial para la sociedad colombiana.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🌈</div>
-                    <h3>Diversidad</h3>
-                    <p>Celebrar las diferencias que nos hacen únicos</p>
+                    <h3>Diversidad Cultural</h3>
+                    <p>Valorar la riqueza étnica y cultural de Colombia, base para la sana convivencia.</p>
                 </div>
             </div>
 
             <div class="info-box">
-                <h3>📝 Frases Inspiradoras</h3>
+                <h3>📝 La Convivencia desde la Educación en Colombia</h3>
                 <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-light);">
-                    "Ningún acto de bondad, por pequeño que sea, es en vano." — Esopo
+                    "La Ley 1620 y el Decreto 1965 buscan asegurar la convivencia pacífica y el ejercicio de los derechos humanos, sexuales y reproductivos en el ámbito escolar."
                 </blockquote>
                 <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-light);">
-                    "El respeto es una calle de dos sentidos. Si lo quieres recibir, primero debes darlo." — R.G. Risch
-                </blockquote>
-                <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--text-light);">
-                    "La diferencia entre lo que hacemos y lo que somos capaces de hacer solucionaría la mayoría de los problemas del mundo." — Mahatma Gandhi
+                    "Los Manuales de Convivencia deben ser un pacto social que promueva la participación, el respeto por la diferencia y la solución de conflictos a través del diálogo."
                 </blockquote>
             </div>
         </div>
     </main>
 
-    <button class="fab-button" id="fabButton">🤖</button>
+    <button class="fab-button" id="fabButton">🇨🇴</button>
 
     <div class="chat-overlay" id="chatOverlay">
         <div class="chat-container">
@@ -704,8 +715,8 @@
                 <div class="chat-header-info">
                     <div class="chat-avatar">🤖</div>
                     <div>
-                        <h3 style="margin: 0; font-size: 1rem; font-weight: 600;">Asistente IA</h3>
-                        <p style="margin: 0; font-size: 0.75rem; opacity: 0.9;">En línea</p>
+                        <h3 style="margin: 0; font-size: 1rem; font-weight: 600;">Lumi: Asistente Colombia</h3>
+                        <p style="margin: 0; font-size: 0.75rem; opacity: 0.9;">En línea para escucharte</p>
                     </div>
                 </div>
                 <button class="chat-close" id="closeChat">✕</button>
@@ -715,7 +726,7 @@
                 <div class="message bot">
                     <div class="message-avatar">🤖</div>
                     <div class="message-content">
-                        ¡Hola! Soy tu asistente de IA. Estoy aquí para apoyarte. ¿En qué puedo ayudarte hoy?
+                        ¡Hola! Soy Lumi, tu acompañante emocional con información sobre el acoso escolar en Colombia. Si te sientes mal o necesitas saber sobre las rutas de atención, **estoy aquí para ti**.
                     </div>
                 </div>
             </div>
@@ -730,13 +741,14 @@
     </div>
 
     <footer>
-        <h3 style="margin-bottom: 0.5rem;">Juntos Contra el Bullying</h3>
-        <p style="opacity: 0.8;">Tu voz importa. Tu acción puede salvar vidas.</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem;">© 2024 App Anti-Bullying. Todos los derechos reservados.</p>
+        <h3 style="margin-bottom: 0.5rem;">Unidos por la Convivencia Escolar en Colombia</h3>
+        <p style="opacity: 0.8;">Iniciativa de apoyo basada en la Ley 1620 y el Decreto 1965 de 2013.</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">© 2024 Luz Estudiantil. Todos los derechos reservados.</p>
     </footer>
 
 <script>
- document.addEventListener("DOMContentLoaded", () => {
+
+document.addEventListener("DOMContentLoaded", () => {
   // ======== NAVBAR =========
   const navLinks = document.querySelectorAll(".nav-link");
   const pages = document.querySelectorAll(".page");
@@ -778,17 +790,18 @@
   const chatMessages = document.getElementById("chatMessages");
   const sendButton = chatForm.querySelector('button[type="submit"]');
 
-  // === CONFIGURACIÓN GROQ ===
-  const apiKey = ""; // ⚠️ Solo para uso personal
-  const apiUrl = "";
+  // === CONFIGURACIÓN GROQ (MANTENIDA LA ORIGINAL) ===
+  const apiKey = "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"; // ⚠️ Solo para uso personal
+  const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
   const model = "llama-3.1-8b-instant";
 
   // === FUNCIONES DE INTERFAZ ===
   function appendMessage(sender, text) {
     const msg = document.createElement("div");
     msg.classList.add("message", sender);
+    // Usar bandera de Colombia 🇨🇴 para el bot, si es posible o el corazón original si el emoji falla.
     msg.innerHTML = `
-      <div class="message-avatar">${sender === "user" ? "👤" : "💙"}</div>
+      <div class="message-avatar">${sender === "user" ? "👤" : "🤖"}</div>
       <div class="message-content">${text}</div>
     `;
     chatMessages.appendChild(msg);
@@ -800,7 +813,7 @@
     typing.id = "typing";
     typing.classList.add("message", "bot");
     typing.innerHTML = `
-      <div class="message-avatar">💙</div>
+      <div class="message-avatar">🤖</div>
       <div class="typing-indicator"><span></span><span></span><span></span></div>
     `;
     chatMessages.appendChild(typing);
@@ -815,12 +828,12 @@
   // === EVENTOS ===
   fabButton.addEventListener("click", () => {
     chatOverlay.classList.toggle("active");
-    fabButton.textContent = chatOverlay.classList.contains("active") ? "✕" : "💙";
+    fabButton.textContent = chatOverlay.classList.contains("active") ? "✕" : "🇨🇴";
   });
 
   closeChat.addEventListener("click", () => {
     chatOverlay.classList.remove("active");
-    fabButton.textContent = "💙";
+    fabButton.textContent = "🇨🇴";
   });
 
   chatForm.addEventListener("submit", async (e) => {
@@ -834,10 +847,10 @@
     sendButton.disabled = true;
     showTyping();
 
-    // === RESPUESTAS RÁPIDAS ===
+    // === RESPUESTAS RÁPIDAS (Añadiendo contexto colombiano) ===
     if (["hola", "buenas", "hey", "holi"].some(p => userText.includes(p))) {
       hideTyping();
-      appendMessage("bot", "¡Hola! 😊 Soy Lumi, tu acompañante emocional. ¿Cómo te sientes hoy?");
+      appendMessage("bot", "¡Hola! 😊 Soy Lumi, tu asistente sobre convivencia escolar en Colombia. ¿Cómo te sientes hoy?");
       chatInput.disabled = false;
       sendButton.disabled = false;
       return;
@@ -845,7 +858,7 @@
 
     if (["como estas", "cómo estás", "que tal"].some(p => userText.includes(p))) {
       hideTyping();
-      appendMessage("bot", "💙 Estoy aquí y listo para escucharte. Cuéntame, ¿cómo te va hoy?");
+      appendMessage("bot", "💙 Estoy aquí y listo para escucharte. Cuéntame, ¿cómo te va hoy? Recuerda que el respeto es la base de la convivencia en el colegio.");
       chatInput.disabled = false;
       sendButton.disabled = false;
       return;
@@ -853,11 +866,11 @@
 
     // === DETECCIÓN DE CONTEXTO ===
     const palabrasEmocionales = ["triste", "mal", "solo", "estresado", "ansioso", "deprimido", "preocupado", "me siento"];
-    const palabrasBullying = ["bullying", "acoso", "intimidación", "molestan", "me insultan", "me pegan"];
+    const palabrasBullying = ["bullying", "acoso", "intimidación", "molestan", "me insultan", "me pegan", "denuncia", "ruta", "ley 1620", "manual de convivencia", "icbf", "comisaría"];
     const contextoEmocional = palabrasEmocionales.some(p => userText.includes(p));
     const contextoBullying = palabrasBullying.some(p => userText.includes(p));
 
-    // === RESPUESTAS SEGÚN CONTEXTO ===
+    // === RESPUESTAS SEGÚN CONTEXTO (Modificado el prompt de sistema) ===
     if (contextoEmocional || contextoBullying) {
       try {
         const res = await fetch(apiUrl, {
@@ -871,7 +884,7 @@
             messages: [
               {
                 role: "system",
-                content: `Eres Lumi 💙, un asistente emocional empático. Escucha, apoya y ofrece consejos amables a personas que se sienten mal o viven situaciones de bullying. Usa un tono cariñoso, humano y tranquilizador.`,
+                content: `Eres Lumi 🤖, un asistente emocional y de información sobre Acoso Escolar en COLOMBIA (bullying). Tu respuesta debe ser empática, clara y, cuando sea pertinente, referenciar la Ley 1620 de 2013, la Ruta de Atención Integral, o las líneas de ayuda colombianas como el 141 del ICBF o el 123 de emergencias. Usa un tono cariñoso, humano y tranquilizador, pero con información concreta y pertinente al contexto escolar colombiano.`,
               },
               { role: "user", content: userText }
             ],
@@ -893,11 +906,11 @@
         }
       } catch (error) {
         hideTyping();
-        appendMessage("bot", "❌ No se pudo conectar con el servidor de ayuda emocional.");
+        appendMessage("bot", "❌ No se pudo conectar con el servidor de ayuda. Por favor, intenta de nuevo más tarde.");
       }
     } else {
       hideTyping();
-      appendMessage("bot", "💬 Lo siento, solo estoy aquí para ayudarte emocionalmente o con temas relacionados al bullying.");
+      appendMessage("bot", "💬 Estoy aquí para ayudarte con temas emocionales o relacionados con el acoso escolar y las rutas de atención en Colombia. ¿Podrías enfocar tu pregunta en esos temas?");
     }
 
     chatInput.disabled = false;
@@ -907,8 +920,5 @@
 });
 </script>
 
-
-
-    
 </body>
 </html>
